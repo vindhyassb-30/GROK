@@ -1,0 +1,2 @@
+# The web app and engine use only the Python standard library.
+# No third-party runtime dependencies are required for Vercel deployment.

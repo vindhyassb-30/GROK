@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grok Signal Desk — NSE Buy/Sell Indicator</title>
+  <link rel="stylesheet" href="/style.css?v=10" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◆</span>
+      <div>
+        <h1>Grok Signal Desk</h1>
+        <p class="tagline">A 23-bot research desk reads the charts and votes BUY / SELL / HOLD</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="search card">
+      <form id="searchForm">
+        <label for="ticker">Ticker — NSE (e.g. RELIANCE) or US (e.g. AAPL)</label>
+        <div class="search-row">
+          <input id="ticker" name="ticker" placeholder="e.g. RELIANCE or AAPL" autocomplete="off" />
+          <button type="submit" id="analyzeBtn">Analyze</button>
+        </div>
+        <div class="tf-toggle" id="tfToggle">
+          <button type="button" class="tf-btn active" data-tf="daily">Daily (swing)</button>
+          <button type="button" class="tf-btn" data-tf="intraday">Intraday (15m)</button>
+        </div>
+      </form>
+      <div class="chips-group">
+        <div class="chips-label">NSE</div>
+        <div class="chips" id="popularNSE"></div>
+        <div class="chips-label">US ($)</div>
+        <div class="chips" id="popularUS"></div>
+      </div>
+    </section>
+
+    <section class="live-bar" id="liveBar">
+      <div class="live-head">
+        <span class="live-dot"></span>
+        <span class="live-title">LIVE SIGNALS</span>
+        <span class="live-meta" id="liveMeta">loading…</span>
+        <button type="button" id="liveRefresh" class="live-refresh" title="Refresh now">⟳</button>
+      </div>
+      <div class="live-track" id="liveTrack"></div>
+      <div class="key-row" style="padding: 0 16px 12px;">
+        <span class="key"><span class="dot buy"></span> BUY — signals lean up</span>
+        <span class="key"><span class="dot sell"></span> SELL — signals lean down</span>
+        <span class="key"><span class="dot wait"></span> WAIT — no clear signal</span>
+        <span class="key">Click a stock to open full analysis</span>
+      </div>
+    </section>
+
+    <section id="status" class="status" hidden></section>
+
+    <section id="warnBanner" class="warn-banner" hidden></section>
+
+    <section id="result" class="result" hidden>
+      <div class="action-now card" id="actionNow">
+        <div class="an-badge" id="anBadge">WAIT</div>
+        <div class="an-body">
+          <h2 id="anHeadline">—</h2>
+          <p id="anReason" class="an-reason">—</p>
+          <div class="an-levels" id="anLevels"></div>
+          <p id="anPerf" class="an-perf"></p>
+        </div>
+      </div>
+
+      <div class="verdict card" id="verdictCard">
+        <div class="verdict-main">
+          <div class="verdict-badge" id="verdictBadge">HOLD</div>
+          <div class="verdict-meta">
+            <h2 id="verdictTicker">—</h2>
+            <span class="data-badge" id="dataBadge" hidden></span>
+            <p id="verdictLine">—</p>
+            <div class="confbar"><div class="confbar-fill" id="confFill"></div></div>
+            <p class="conf-label" id="confLabel"></p>
+          </div>
+        </div>
+        <div class="indicators" id="indicatorStrip"></div>
+      </div>
+
+      <div class="card chart-card">
+        <div class="chart-head">
+          <h3>Price &amp; moving averages</h3>
+          <div class="legend">
+            <span class="lg lg-candle">Candles</span>
+            <span class="lg lg-sma20">SMA 20</span>
+            <span class="lg lg-sma50">SMA 50</span>
+          </div>
+        </div>
+        <div id="chart"></div>
+        <div class="subchart">
+          <div class="subchart-label">RSI (14) <span class="sub-hint">70 overbought · 30 oversold</span></div>
+          <div id="rsiChart"></div>
+        </div>
+        <div class="subchart">
+          <div class="subchart-label">MACD (12,26,9)</div>
+          <div id="macdChart"></div>
+        </div>
+        <p class="source-note" id="sourceNote"></p>
+        <p class="source-note" id="updatedNote"></p>
+      </div>
+
+      <div class="card bias-card" id="biasCard">
+        <h3>Near-term bias <span class="muted-tag">tendency, not a guarantee</span></h3>
+        <div class="bias-row">
+          <span class="bias-badge" id="biasBadge">—</span>
+          <div>
+            <p id="biasNote" class="bias-note">—</p>
+            <p class="conf-label" id="biasConf"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <h3>Buy / Sell signals log <span class="muted-tag">most recent first</span></h3>
+          <div id="eventsLog" class="events-log"></div>
+        </div>
+        <div class="card">
+          <h3>Recent news <span class="muted-tag" id="newsTag"></span></h3>
+          <div id="newsList" class="news-list"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Department desks</h3>
+        <div id="leads" class="leads"></div>
+      </div>
+
+      <div class="card reasons-card">
+        <h3>Why</h3>
+        <ul id="reasons" class="reasons"></ul>
+        <div id="disagreements" class="disagreements"></div>
+      </div>
+
+      <p class="disclaimer" id="disclaimer"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Research &amp; education only. Technical-analysis signals, not financial advice. No guaranteed outcomes.</p>
+  </footer>
+
+  <script src="/app.js?v=10"></script>
+</body>
+</html>
